@@ -1,0 +1,95 @@
+package com.it.user.service;
+
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
+import com.it.user.entity.UsersEntity;
+import com.it.user.mapper.UsersMapper;
+import com.it.user.model.Departments.DepartmentInfo;
+import com.it.user.model.Organizations.OrganizationInfo;
+import com.it.user.model.Users.UserInfo;
+import com.it.user.repository.UsersRepository;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@Slf4j
+public class UsersService {
+    private final UsersRepository userRepo;
+    private final UsersMapper userMapper;
+    private final OrganizationsService organizationService;
+    private final DepartmentsService departmentService;
+
+    public UsersService(UsersRepository userRepo, UsersMapper userMapper, OrganizationsService organizationService,
+            DepartmentsService departmentService) {
+        this.userRepo = userRepo;
+        this.userMapper = userMapper;
+        this.organizationService = organizationService;
+        this.departmentService = departmentService;
+    }
+
+    public UserInfo loginUser(String username, String password) {
+        log.info("Logging in user: {}", username);
+        try {
+            UsersEntity user = validateAndGetUser(username);
+            validateUserStatus(user);
+            validatePassword(user, password);
+
+            log.info("Successfully logged in user: {}", username);
+            return buildUserInfo(user);
+        } catch (Exception e) {
+            log.error("Error logging in user: {}", username, e);
+            throw new RuntimeException("Error logging in user: " + e.getMessage());
+        }
+    }
+
+    public UserInfo getUserById(UUID id) {
+        log.info("Fetching user by ID: {}", id);
+        try {
+            UsersEntity user = userRepo.findById(id)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            log.info("Successfully retrieved user - ID: {}, Username: {}", id, user.getUsername());
+            return buildUserInfo(user);
+        } catch (Exception e) {
+            log.error("Error fetching user by ID: {}", id, e);
+            throw new RuntimeException("Error fetching user by ID: " + e.getMessage());
+        }
+    }
+
+    private UsersEntity validateAndGetUser(String username) {
+        return userRepo.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    private void validateUserStatus(UsersEntity user) {
+        if (!"ACTIVE".equals(user.getStatus())) {
+            log.warn("User is not active: {}", user.getUsername());
+            throw new RuntimeException("User is not active");
+        }
+    }
+
+    private void validatePassword(UsersEntity user, String password) {
+        if (!user.getPasswordHash().equals(password)) {
+            log.warn("Invalid password for user: {}", user.getUsername());
+            throw new RuntimeException("Invalid password");
+        }
+    }
+
+    private UserInfo buildUserInfo(UsersEntity user) {
+        OrganizationInfo organization = organizationService.getOrganizationById(user.getOrganizationId());
+        if (organization == null) {
+            log.warn("Organization not found with ID: {}", user.getOrganizationId());
+            throw new RuntimeException("Organization not found");
+        }
+
+        DepartmentInfo department = departmentService.getDepartmentById(user.getDepartmentId());
+        if (department == null) {
+            log.warn("Department not found with ID: {}", user.getDepartmentId());
+            throw new RuntimeException("Department not found");
+        }
+
+        return userMapper.mapToUserInfo(user, organization, department);
+    }
+}
