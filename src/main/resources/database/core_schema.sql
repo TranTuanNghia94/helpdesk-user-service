@@ -252,3 +252,8 @@ INSERT INTO roles (organization_id, name, code, description, is_system_role, per
 ('00000000-0000-0000-0000-000000000000', 'Support Manager', 'SUPPORT_MANAGER', 'Support team management', true, '{"tickets": "*", "users": "read", "reports": "*"}'),
 ('00000000-0000-0000-0000-000000000000', 'Support Agent', 'SUPPORT_AGENT', 'Handle support tickets', true, '{"tickets": ["read", "update"], "knowledge": ["read"]}'),
 ('00000000-0000-0000-0000-000000000000', 'End User', 'END_USER', 'Submit and track tickets', true, '{"tickets": ["create", "read_own"], "knowledge": ["read"]}'); 
+
+
+-- Insert default users sudper admin with password using has of bcrypt admin@123456789
+INSERT INTO users (id, organization_id, department_id, username, email, password_hash, first_name, last_name, middle_name, display_name, employee_id, phone, mobile, job_title, manager_id, location, timezone, language, avatar_url, last_login_at, password_changed_at, must_change_password, failed_login_attempts, locked_until, is_mfa_enabled, mfa_secret, status, preferences)
+VALUES  ('00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000000', NULL, 'admin', 'admin@example.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Admin', 'Admin', NULL, 'Admin', NULL, NULL, NULL, NULL, NULL, NULL, 'en', 'VI', NULL, NULL, NULL, NULL, 0, NULL, false, NULL, NULL, NULL);

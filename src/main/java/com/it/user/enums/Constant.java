@@ -25,4 +25,9 @@ public class Constant {
         }
     }
 
+    public static final String USER_EVENT_REQUEST = "user-event-request";
+    public static final String USER_EVENT_RESPONSE = "user-event-response";
+    public static final String EVENT_GROUP = "helpdesk-gateway";
+    public static final String OPERATION_LOGIN = "login";
+
 }

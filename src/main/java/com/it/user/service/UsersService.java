@@ -8,6 +8,7 @@ import com.it.user.entity.UsersEntity;
 import com.it.user.mapper.UsersMapper;
 import com.it.user.model.Departments.DepartmentInfo;
 import com.it.user.model.Organizations.OrganizationInfo;
+import com.it.user.model.Users.Login;
 import com.it.user.model.Users.UserInfo;
 import com.it.user.repository.UsersRepository;
 
@@ -29,17 +30,17 @@ public class UsersService {
         this.departmentService = departmentService;
     }
 
-    public UserInfo loginUser(String username, String password) {
-        log.info("Logging in user: {}", username);
+    public UserInfo loginUser(Login login) {
+        log.info("Logging in user: {}", login.getUsername());
         try {
-            UsersEntity user = validateAndGetUser(username);
+            UsersEntity user = validateAndGetUser(login.getUsername());
             validateUserStatus(user);
-            validatePassword(user, password);
+            validatePassword(user, login.getPassword());
 
-            log.info("Successfully logged in user: {}", username);
+            log.info("Successfully logged in user: {}", login.getUsername());
             return buildUserInfo(user);
         } catch (Exception e) {
-            log.error("Error logging in user: {}", username, e);
+            log.error("Error logging in user: {}", login.getUsername(), e);
             throw new RuntimeException("Error logging in user: " + e.getMessage());
         }
     }
