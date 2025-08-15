@@ -1,35 +1,37 @@
-package com.it.user.service;
+package com.it.user.service.Users;
 
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import com.it.user.entity.UserRolesEntity;
 import com.it.user.entity.UsersEntity;
 import com.it.user.mapper.UsersMapper;
 import com.it.user.model.Departments.DepartmentInfo;
 import com.it.user.model.Organizations.OrganizationInfo;
+import com.it.user.model.Roles.RoleInfo;
 import com.it.user.model.Users.Login;
 import com.it.user.model.Users.UserInfo;
+import com.it.user.repository.UserRolesRepository;
 import com.it.user.repository.UsersRepository;
+import com.it.user.service.DepartmentsService;
+import com.it.user.service.OrganizationsService;
+import com.it.user.service.RolesService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class UsersService {
+@RequiredArgsConstructor
+public class AuthService {
     private final UsersRepository userRepo;
     private final UsersMapper userMapper;
     private final OrganizationsService organizationService;
     private final DepartmentsService departmentService;
-
-    public UsersService(UsersRepository userRepo, UsersMapper userMapper, OrganizationsService organizationService,
-            DepartmentsService departmentService) {
-        this.userRepo = userRepo;
-        this.userMapper = userMapper;
-        this.organizationService = organizationService;
-        this.departmentService = departmentService;
-    }
+    private final UserRolesRepository userRoleRepo;
+    private final RolesService roleService;
 
     public UserInfo loginUser(Login login) {
         log.info("Logging in user: {}", login.getUsername());
@@ -94,6 +96,18 @@ public class UsersService {
             throw new RuntimeException("Department not found");
         }
 
-        return userMapper.mapToUserInfo(user, organization, department);
+        UserRolesEntity userRole = userRoleRepo.findByUserId(user.getId());
+        if (userRole == null) {
+            log.warn("User role not found with ID: {}", user.getId());
+            throw new RuntimeException("User role not found");
+        }
+
+        RoleInfo role = roleService.getRoleById(userRole.getRoleId());
+        if (role == null) {
+            log.warn("Role not found with ID: {}", userRole.getRoleId());
+            throw new RuntimeException("Role not found");
+        }
+
+        return userMapper.mapToUserInfo(user, organization, department, role);
     }
 }

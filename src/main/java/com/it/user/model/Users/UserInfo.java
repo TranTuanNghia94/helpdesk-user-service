@@ -2,6 +2,8 @@ package com.it.user.model.Users;
 
 import java.util.UUID;
 
+import com.it.user.model.Roles.RoleInfo;
+
 import lombok.Data;
 
 @Data
@@ -29,4 +31,5 @@ public class UserInfo {
     private Object workSchedule;
     private Object preferences;
     private String status;
+    private RoleInfo role;  
 }

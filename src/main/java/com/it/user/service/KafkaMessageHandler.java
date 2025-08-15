@@ -9,6 +9,7 @@ import com.it.user.enums.Constant;
 import com.it.user.model.Kafka.KafkaMessage;
 import com.it.user.model.Users.Login;
 import com.it.user.model.Users.UserInfo;
+import com.it.user.service.Users.AuthService;
 import com.it.user.utils.KafkaMessageBuilder;
 
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class KafkaMessageHandler {
     private final KafkaTemplate<String, KafkaMessage> kafkaTemplate;
-    private final UsersService userService;
+    private final AuthService authService;
     private final ObjectMapper objectMapper;
 
     private void sendMessage(KafkaMessage message, String topic) {
@@ -43,7 +44,7 @@ public class KafkaMessageHandler {
             log.info("Processing login request - Message ID: {} | Username: {}", message.getMessageId(), login.getUsername());
 
             // Process the login event
-            UserInfo userInfo = userService.loginUser(login);
+            UserInfo userInfo = authService.loginUser(login);
 
             // Send response with the same messageId
             responseLoginEvent(userInfo, message.getMessageId());

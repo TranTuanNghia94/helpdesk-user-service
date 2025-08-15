@@ -6,10 +6,11 @@ import com.it.user.entity.UsersEntity;
 import com.it.user.model.Users.UserInfo;
 import com.it.user.model.Organizations.OrganizationInfo;
 import com.it.user.model.Departments.DepartmentInfo;
+import com.it.user.model.Roles.RoleInfo;
 
 @Component
 public class UsersMapper {
-    public UserInfo mapToUserInfo(UsersEntity user, OrganizationInfo organization, DepartmentInfo department) {
+    public UserInfo mapToUserInfo(UsersEntity user, OrganizationInfo organization, DepartmentInfo department, RoleInfo role) {
         if (user == null) {
             return null;
         }
@@ -37,6 +38,7 @@ public class UsersMapper {
         userInfo.setWorkSchedule(user.getWorkSchedule());
         userInfo.setPreferences(user.getPreferences());
         userInfo.setStatus(user.getStatus());
+        userInfo.setRole(role);
         
         return userInfo;
     }

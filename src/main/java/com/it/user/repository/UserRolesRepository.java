@@ -10,4 +10,6 @@ import com.it.user.entity.UserRolesEntity;
 @Repository
 public interface UserRolesRepository extends JpaRepository<UserRolesEntity, UUID> {
 
+    UserRolesEntity findByUserId(UUID id);
+
 }
