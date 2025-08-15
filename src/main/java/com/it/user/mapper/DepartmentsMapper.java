@@ -16,8 +16,8 @@ public class DepartmentsMapper {
         departmentInfo.setId(department.getId().toString());
         departmentInfo.setCode(department.getCode());
         departmentInfo.setName(department.getName());
-        departmentInfo.setParentDepartmentId(department.getParentDepartmentId().toString());
-        departmentInfo.setManagerId(department.getManagerId().toString());
+        departmentInfo.setParentDepartmentId(department.getParentDepartmentId() != null ? department.getParentDepartmentId().toString() : null);
+        departmentInfo.setManagerId(department.getManagerId() != null ? department.getManagerId().toString() : null);
         departmentInfo.setCostCenter(department.getCostCenter());
         departmentInfo.setLocation(department.getLocation());
         departmentInfo.setDescription(department.getDescription());

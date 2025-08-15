@@ -3,6 +3,7 @@ package com.it.user.service;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import com.it.user.entity.UsersEntity;
 import com.it.user.mapper.UsersMapper;
@@ -72,7 +73,9 @@ public class UsersService {
     }
 
     private void validatePassword(UsersEntity user, String password) {
-        if (!user.getPasswordHash().equals(password)) {
+        // String aaa = BCrypt.hashpw(password, BCrypt.gensalt());
+
+        if (!BCrypt.checkpw(password, user.getPasswordHash())) {
             log.warn("Invalid password for user: {}", user.getUsername());
             throw new RuntimeException("Invalid password");
         }

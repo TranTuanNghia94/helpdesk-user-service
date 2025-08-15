@@ -35,7 +35,7 @@ public class KafkaMessageHandler {
         sendMessage(response, Constant.USER_EVENT_RESPONSE);
     }
 
-    @KafkaListener(topics = Constant.USER_EVENT_REQUEST, groupId = Constant.EVENT_GROUP)
+    @KafkaListener(topics = Constant.USER_EVENT_REQUEST, groupId = Constant.EVENT_GROUP, containerFactory = "kafkaListenerContainerFactory")
     private void listenUserEvent(KafkaMessage message) {
         try {
             Login login = objectMapper.convertValue(message.getPayload(), Login.class);
