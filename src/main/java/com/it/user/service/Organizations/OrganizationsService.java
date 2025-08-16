@@ -1,4 +1,4 @@
-package com.it.user.service;
+package com.it.user.service.Organizations;
 
 import java.util.UUID;
 

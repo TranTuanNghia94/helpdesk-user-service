@@ -1,4 +1,4 @@
-package com.it.user.service;
+package com.it.user.service.Roles;
 
 import java.util.UUID;
 
@@ -9,6 +9,7 @@ import com.it.user.mapper.RolesMapper;
 import com.it.user.model.Organizations.OrganizationInfo;
 import com.it.user.model.Roles.RoleInfo;
 import com.it.user.repository.RolesRepository;
+import com.it.user.service.Organizations.OrganizationsService;
 
 import lombok.extern.slf4j.Slf4j;
 

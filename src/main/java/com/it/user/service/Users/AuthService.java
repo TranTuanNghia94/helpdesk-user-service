@@ -15,9 +15,9 @@ import com.it.user.model.Users.Login;
 import com.it.user.model.Users.UserInfo;
 import com.it.user.repository.UserRolesRepository;
 import com.it.user.repository.UsersRepository;
-import com.it.user.service.DepartmentsService;
-import com.it.user.service.OrganizationsService;
-import com.it.user.service.RolesService;
+import com.it.user.service.Departments.DepartmentsService;
+import com.it.user.service.Organizations.OrganizationsService;
+import com.it.user.service.Roles.RolesService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,8 +75,6 @@ public class AuthService {
     }
 
     private void validatePassword(UsersEntity user, String password) {
-        // String aaa = BCrypt.hashpw(password, BCrypt.gensalt());
-
         if (!BCrypt.checkpw(password, user.getPasswordHash())) {
             log.warn("Invalid password for user: {}", user.getUsername());
             throw new RuntimeException("Invalid password");

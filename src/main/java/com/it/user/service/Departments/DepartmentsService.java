@@ -1,4 +1,4 @@
-package com.it.user.service;
+package com.it.user.service.Departments;
 
 import java.util.UUID;
 
@@ -9,6 +9,7 @@ import com.it.user.mapper.DepartmentsMapper;
 import com.it.user.model.Departments.DepartmentInfo;
 import com.it.user.model.Organizations.OrganizationInfo;
 import com.it.user.repository.DepartmentsRepository;
+import com.it.user.service.Organizations.OrganizationsService;
 
 import lombok.extern.slf4j.Slf4j;
 
